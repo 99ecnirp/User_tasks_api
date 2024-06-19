@@ -41,7 +41,7 @@ const update = async (req: Request, res: Response) => {
   const taskId = req.params.id;
   const email = getEmailFromHeader(req);
   const newSubtasks: { subject: string; status: string; deadline: Date }[] =
-    req.body.subtasks;
+    req.body;
   const {
     error: getAllSubTasksError,
     message: getAllSubTasksMessage,
@@ -49,7 +49,7 @@ const update = async (req: Request, res: Response) => {
     data: getAllSubtasksData,
   } = await getAllSubTasks(email, taskId, true);
   if (getAllSubTasksError) {
-    //log error
+    console.error(getAllSubTasksMessage)
     return res.status(getAllSubTasksStatus ?? 500).json({
       error: true,
       message: getAllSubTasksMessage,
@@ -76,12 +76,11 @@ const update = async (req: Request, res: Response) => {
   for (let [key, value] of newSubtasksMap) {
     getAllSubtasksData.push(value);
   }
-
   const { error: updateSubtaskByIdError, message: updateSubtaskByIdMessage } =
     await updateSubtaskById(email, taskId, getAllSubtasksData);
 
   if (updateSubtaskByIdError) {
-    //log error
+    console.error(updateSubtaskByIdMessage)
     return res.status(500).json({
       error: true,
       message: ERROR_MESSAGES.INTERNAL_SERVER,

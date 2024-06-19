@@ -7,7 +7,7 @@ const connectMongo = async () => {
       `${mongoConfig.connectionString}/${mongoConfig.dbName}`
     );
   } catch (e) {
-    //log error
+    console.error(e);
     process.exit();
   }
 };

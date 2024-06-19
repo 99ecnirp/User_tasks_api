@@ -20,7 +20,8 @@ const ERROR_MESSAGES = {
     FETCH_ONE: (id: string) => {
       return `Failed to fetch the task with task id ${id}.`
     },
-    NO_TASKS: `No tasks are present associated with your user.`
+    NO_TASKS: `No tasks are present associated with your user.`,
+    DELETE: "Failed to delete the task"
   },
   INTERNAL_SERVER: "Internal Server Error. Kindly try again after some time.",
   INVALID_REQUEST_BODY: "Invalid request body.",

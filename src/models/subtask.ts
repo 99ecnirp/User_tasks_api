@@ -9,7 +9,17 @@ const getAllSubTasks = async (
   needDeletedSubtasks: boolean
 ): Promise<ICommonReturn> => {
   try {
-    const _id = new mongoose.Types.ObjectId(taskId);
+    let _id;
+    try {
+      _id = new mongoose.Types.ObjectId(taskId);
+    } catch (error) {
+      return {
+        error: true,
+        message: ERROR_MESSAGES.TASKS.NOT_FOUND(taskId),
+        status: 400,
+        data: {},
+      };
+    }
     let subtasks;
     if (needDeletedSubtasks) {
       subtasks = "$tasks.subtasks";
@@ -60,7 +70,7 @@ const getAllSubTasks = async (
     if (!Array.isArray(result)) {
       return {
         error: true,
-        message: "Failed to fetch all subtasks",
+        message: ERROR_MESSAGES.SUBTASKS.FETCH,
         data: {},
       };
     } else if (result.length === 0) {
@@ -92,7 +102,17 @@ const updateSubtaskById = async (
   updateSubtaskData: object[]
 ) => {
   try {
-    const _id = new mongoose.Types.ObjectId(id);
+    let _id;
+    try {
+      _id = new mongoose.Types.ObjectId(id);
+    } catch (error) {
+      return {
+        error: true,
+        message: ERROR_MESSAGES.TASKS.NOT_FOUND(id),
+        status: 400,
+        data: {},
+      };
+    }
     const result = await userModel.updateOne(
       {
         email,

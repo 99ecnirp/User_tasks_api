@@ -2,7 +2,8 @@ import express from "express";
 import http from "http";
 import connectMongo from "./database/mongo";
 import { taskRoutes, userRoutes } from "./routes";
-import { SUCCESS } from "./utils/constants";
+import { ERROR_MESSAGES, SUCCESS } from "./utils/constants";
+import { appConfig } from "./config";
 
 const router = express();
 
@@ -17,7 +18,7 @@ async function main() {
     res.on("finish", () => {
       /** Log the res */
       console.log(
-        `Result - METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.socket.remoteAddress}] - STATUS: [${res.statusCode}] -- ${req.params}`
+        `Result - METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.socket.remoteAddress}] - STATUS: [${res.statusCode}]`
       );
     });
 
@@ -46,8 +47,8 @@ async function main() {
   });
 
   /** Routes */
-  router.use('/user', userRoutes);
-  router.use('/tasks', taskRoutes);
+  router.use("/user", userRoutes);
+  router.use("/tasks", taskRoutes);
 
   /** Healthcheck */
   router.get("/healthcheck", (req, res) =>
@@ -59,7 +60,7 @@ async function main() {
 
   /** Error handling */
   router.use((req, res, next) => {
-    const error = new Error("Something went wrong");
+    const error = new Error(ERROR_MESSAGES.INTERNAL_SERVER);
 
     console.log(error);
 
@@ -68,9 +69,7 @@ async function main() {
     });
   });
 
-  http
-    .createServer(router)
-    .listen(3000, () => console.log(`Server is running on port 3000`));
+  http.createServer(router).listen(appConfig.port);
 }
 
 main();

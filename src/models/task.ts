@@ -79,7 +79,17 @@ const getAllTasks = async (email: string) => {
 
 const getTaskById = async (email: string, id: string) => {
   try {
-    const _id = new mongoose.Types.ObjectId(id);
+    let _id;
+    try {
+      _id = new mongoose.Types.ObjectId(id);
+    } catch (error) {
+      return {
+        error: true,
+        message: ERROR_MESSAGES.TASKS.NOT_FOUND(id),
+        status: 400,
+        data: {},
+      };
+    }
     const result = await userModel.aggregate([
       {
         $match: {
@@ -123,7 +133,7 @@ const getTaskById = async (email: string, id: string) => {
     } else if (result.length === 0) {
       return {
         error: true,
-        message: ERROR_MESSAGES.TASKS.FETCH_ONE(id),
+        message: ERROR_MESSAGES.TASKS.NOT_FOUND(id),
         data: {},
         status: 400,
       };
@@ -131,7 +141,7 @@ const getTaskById = async (email: string, id: string) => {
       return {
         error: false,
         message: SUCCESS,
-        data: result[0].tasks,
+        data: result[0].task,
       };
     }
   } catch (error) {
@@ -173,7 +183,17 @@ const updateTaskById = async (
   updateTask: { [key: string]: string }
 ) => {
   try {
-    const _id = new mongoose.Types.ObjectId(id);
+    let _id;
+    try {
+      _id = new mongoose.Types.ObjectId(id);
+    } catch (error) {
+      return {
+        error: true,
+        message: ERROR_MESSAGES.TASKS.NOT_FOUND(id),
+        status: 400,
+        data: {},
+      };
+    }
     const dataToUpdate: {
       [key: string]: string;
     } = {};
@@ -215,10 +235,24 @@ const updateTaskById = async (
 
 const removeTaskById = async (email: string, id: string) => {
   try {
+    const task = await getTaskById(email, id);
+    if(task.error){
+      return task;
+    }
     const updateObj = {
       "tasks.$.deletedAt": new Date(),
     };
-    const _id = new mongoose.Types.ObjectId(id);
+    let _id;
+    try {
+      _id = new mongoose.Types.ObjectId(id);
+    } catch (error) {
+      return {
+        error: true,
+        message: ERROR_MESSAGES.TASKS.NOT_FOUND(id),
+        status: 400,
+        data: {},
+      };
+    }
     const result = await userModel.updateOne(
       { email, "tasks._id": _id },
       { $set: updateObj }
@@ -226,7 +260,7 @@ const removeTaskById = async (email: string, id: string) => {
     if (!result || !result.acknowledged) {
       return {
         error: true,
-        message: "Failed to delete the task",
+        message: ERROR_MESSAGES.TASKS.DELETE,
         data: {},
       };
     } else {
@@ -239,7 +273,7 @@ const removeTaskById = async (email: string, id: string) => {
   } catch (error) {
     return {
       error: true,
-      message: "Failed to delete the task",
+      message: ERROR_MESSAGES.TASKS.DELETE,
       data: error,
     };
   }

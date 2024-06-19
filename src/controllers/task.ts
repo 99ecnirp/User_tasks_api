@@ -16,8 +16,8 @@ const getById = async (req: Request, res: Response) => {
     const {
       error: getTaskByIdError,
       message: getTaskByIdMessage,
-      status: getTaskBtIdStatus,
       data: getTaskByIdData,
+      status: getTaskBtIdStatus,
     } = await getTaskById(email, id);
     if (getTaskByIdError) {
       console.error(getTaskByIdMessage);
@@ -149,7 +149,7 @@ const remove = async (req: Request, res: Response) => {
     } = await removeTaskById(email, id);
     if (removeTaskByIdError) {
       console.error(removeTaskByIdMessage);
-      res.send(500).json({
+      return res.status(500).json({
         error: true,
         message: removeTaskByIdMessage,
         data: removeTaskByIdData,
@@ -162,7 +162,7 @@ const remove = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error(error);
-    res.send(500).json({
+    return res.status(500).json({
       error: true,
       message: ERROR_MESSAGES.INTERNAL_SERVER,
       data: {},
