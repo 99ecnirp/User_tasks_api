@@ -1,5 +1,5 @@
 import mongoose, { ObjectId } from "mongoose";
-import userModel from "./User";
+import userModel from "./user";
 import { ITask } from "../utils/interfaces";
 import { ERROR_MESSAGES, SUCCESS } from "../utils/constants";
 

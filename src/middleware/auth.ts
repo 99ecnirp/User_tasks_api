@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { getUserByEmail } from "../models/User";
+import { getUserByEmail } from "../models/user";
 import { ERROR_MESSAGES } from "../utils/constants";
 import { jwtconfig } from "../config";
 

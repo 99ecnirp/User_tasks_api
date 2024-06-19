@@ -1,6 +1,6 @@
 import express from "express";
 import { authController } from "../controllers";
-import { Schemas, ValidateJoi } from "../middleware/Joi";
+import { Schemas, ValidateJoi } from "../middleware/joi";
 import { verifyJWT } from "../middleware/auth";
 
 const router = express.Router();

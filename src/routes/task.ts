@@ -1,6 +1,6 @@
 import express from "express";
 import controller from "../controllers/task";
-import { Schemas, ValidateJoi } from "../middleware/Joi";
+import { Schemas, ValidateJoi } from "../middleware/joi";
 import { verifyJWT } from "../middleware/auth";
 import subTasksController from "../controllers/subtask";
 

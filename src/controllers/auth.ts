@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import { authConfig, jwtconfig } from "../config";
 import { getEmailFromHeader } from "../utils/helper";
 import { ERROR_MESSAGES, SUCCESS } from "../utils/constants";
-import { getUserByEmail, createUser, updateUser } from "../models/User";
+import { getUserByEmail, createUser, updateUser } from "../models/user";
 
 const register = async (req: Request, res: Response) => {
   try {
@@ -160,7 +160,7 @@ export const login = async (req: Request, res: Response) => {
       { expiresIn: `${jwtconfig.expiresInHours}h` }
     );
 
-    return res.status(201).json({
+    return res.status(200).json({
       error: false,
       message: SUCCESS,
       data: {
