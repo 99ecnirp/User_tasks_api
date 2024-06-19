@@ -20,7 +20,7 @@ const getById = async (req: Request, res: Response) => {
       data: getTaskByIdData,
     } = await getTaskById(email, id);
     if (getTaskByIdError) {
-      //log error
+      console.error(getTaskByIdMessage);
       return res.status(getTaskBtIdStatus ?? 500).json({
         error: true,
         message: getTaskByIdMessage,
@@ -33,7 +33,7 @@ const getById = async (req: Request, res: Response) => {
       data: getTaskByIdData,
     });
   } catch (error) {
-    //log error
+    console.error(error);
     return {
       error: true,
       message: ERROR_MESSAGES.INTERNAL_SERVER,
@@ -51,7 +51,7 @@ const get = async (req: Request, res: Response) => {
       data: getAllTasksData,
     } = await getAllTasks(email);
     if (getAllTasksError) {
-      //log error
+      console.error(getAllTasksMessage);
       return res.send(500).json({
         error: true,
         message: getAllTasksMessage,
@@ -65,6 +65,7 @@ const get = async (req: Request, res: Response) => {
       });
     }
   } catch (error) {
+    console.error(error);
     return res.send(500).json({
       error: true,
       message: ERROR_MESSAGES.TASKS.FETCH_ALL,
@@ -83,7 +84,7 @@ const create = async (req: Request, res: Response) => {
       data: createTaskData,
     } = await createTask(email, req.body);
     if (createTaskError) {
-      //log error
+      console.error(createTaskMessage);
       res.send(500).json({
         error: true,
         message: createTaskMessage,
@@ -96,6 +97,7 @@ const create = async (req: Request, res: Response) => {
       data: createTaskData,
     });
   } catch (error) {
+    console.error(error);
     res.send(500).json({
       error: true,
       message: ERROR_MESSAGES.INTERNAL_SERVER,
@@ -114,7 +116,7 @@ const update = async (req: Request, res: Response) => {
       data: updateTaskByIdData,
     } = await updateTaskById(email, id, req.body);
     if (updateTaskByIdError) {
-      //log error
+      console.error(updateTaskByIdMessage);
       res.send(500).json({
         error: true,
         message: updateTaskByIdMessage,
@@ -127,6 +129,7 @@ const update = async (req: Request, res: Response) => {
       data: updateTaskByIdData,
     });
   } catch (error) {
+    console.error(error);
     res.send(500).json({
       error: true,
       message: ERROR_MESSAGES.INTERNAL_SERVER,
@@ -145,7 +148,7 @@ const remove = async (req: Request, res: Response) => {
       data: removeTaskByIdData,
     } = await removeTaskById(email, id);
     if (removeTaskByIdError) {
-      //log error
+      console.error(removeTaskByIdMessage);
       res.send(500).json({
         error: true,
         message: removeTaskByIdMessage,
@@ -158,6 +161,7 @@ const remove = async (req: Request, res: Response) => {
       data: removeTaskByIdData,
     });
   } catch (error) {
+    console.error(error);
     res.send(500).json({
       error: true,
       message: ERROR_MESSAGES.INTERNAL_SERVER,

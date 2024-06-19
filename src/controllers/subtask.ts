@@ -15,7 +15,7 @@ const get = async (req: Request, res: Response) => {
       data: getAllSubtasksData,
     } = await getAllSubTasks(email, taskId, false);
     if (getAllSubTasksError) {
-      //log error
+      console.error(getAllSubTasksMessage)
       return res.status(getAllSubTasksStatus ?? 500).json({
         error: true,
         message: getAllSubTasksMessage,
@@ -28,7 +28,7 @@ const get = async (req: Request, res: Response) => {
       data: getAllSubtasksData,
     });
   } catch (error) {
-    //log error
+    console.error(error)
     return res.status(500).json({
       error: true,
       message: ERROR_MESSAGES.INTERNAL_SERVER,

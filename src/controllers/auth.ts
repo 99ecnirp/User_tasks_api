@@ -109,7 +109,7 @@ export const login = async (req: Request, res: Response) => {
     } = await getUserByEmail(email);
 
     if (getUserByEmailError) {
-      //log error message
+      console.error(getUserByEmailMessage)
       return res.status(500).json({
         error: true,
         message: ERROR_MESSAGES.INTERNAL_SERVER,
@@ -143,7 +143,7 @@ export const login = async (req: Request, res: Response) => {
       await updateUser({ email, loggedIn: true });
 
     if (updateUserError) {
-      //log error
+      console.error(updateUserMessage)
       return res.status(500).json({
         error: true,
         message: ERROR_MESSAGES.INTERNAL_SERVER,
@@ -170,7 +170,7 @@ export const login = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    //log error
+    console.error(error)
     return res.status(500).json({
       error: true,
       message: ERROR_MESSAGES.INTERNAL_SERVER,

@@ -4,7 +4,7 @@ import schema from "./schema";
 dotenv.config();
 const { error, value: envVars } = schema.validate(process.env);
 if (error) {
-  console.log(error);
+  console.error(error);
   process.exit();
 }
 
