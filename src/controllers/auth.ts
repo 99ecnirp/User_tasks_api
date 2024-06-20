@@ -19,6 +19,7 @@ const register = async (req: Request, res: Response) => {
       });
     }
 
+    //checking if user's email already present in our database or not
     const {
       error: getUserByEmailError,
       message: getUserByEmailMessage,
@@ -26,7 +27,7 @@ const register = async (req: Request, res: Response) => {
     } = await getUserByEmail(email);
 
     if (getUserByEmailError) {
-      //log error message
+      console.error(getUserByEmailMessage);
       return res.status(500).json({
         error: true,
         message: ERROR_MESSAGES.INTERNAL_SERVER,
@@ -40,6 +41,7 @@ const register = async (req: Request, res: Response) => {
       });
     }
 
+    //hashing the password before svae
     password = await bcrypt.hash(password, authConfig.hashSaltround);
 
     const {
@@ -53,7 +55,7 @@ const register = async (req: Request, res: Response) => {
     });
 
     if (createUserError) {
-      //log error
+      console.error(createUserMessage)
       return res.status(500).json({
         error: true,
         message: ERROR_MESSAGES.INTERNAL_SERVER,
@@ -61,6 +63,7 @@ const register = async (req: Request, res: Response) => {
       });
     }
 
+    //generating jwt token for user
     const accessToken = jwt.sign(
       {
         name,
@@ -81,7 +84,7 @@ const register = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    //log error
+    console.error(error);
     return res.status(500).json({
       error: true,
       message: ERROR_MESSAGES.INTERNAL_SERVER,
@@ -102,6 +105,7 @@ export const login = async (req: Request, res: Response) => {
       });
     }
 
+    //checking is user exists in your database or not
     const {
       error: getUserByEmailError,
       message: getUserByEmailMessage,
@@ -109,7 +113,7 @@ export const login = async (req: Request, res: Response) => {
     } = await getUserByEmail(email);
 
     if (getUserByEmailError) {
-      console.error(getUserByEmailMessage)
+      console.error(getUserByEmailMessage);
       return res.status(500).json({
         error: true,
         message: ERROR_MESSAGES.INTERNAL_SERVER,
@@ -127,6 +131,7 @@ export const login = async (req: Request, res: Response) => {
       });
     }
 
+    //checking password correction
     const isPasswordSame = await bcrypt.compare(
       password,
       getUserByEmailData.password
@@ -143,7 +148,7 @@ export const login = async (req: Request, res: Response) => {
       await updateUser({ email, loggedIn: true });
 
     if (updateUserError) {
-      console.error(updateUserMessage)
+      console.error(updateUserMessage);
       return res.status(500).json({
         error: true,
         message: ERROR_MESSAGES.INTERNAL_SERVER,
@@ -151,6 +156,7 @@ export const login = async (req: Request, res: Response) => {
       });
     }
 
+    //genrating jwt token for correct credentials
     const accessToken = jwt.sign(
       {
         name: getUserByEmailData.name,
@@ -170,7 +176,7 @@ export const login = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    console.error(error)
+    console.error(error);
     return res.status(500).json({
       error: true,
       message: ERROR_MESSAGES.INTERNAL_SERVER,
@@ -182,11 +188,13 @@ export const login = async (req: Request, res: Response) => {
 export const logout = async (req: Request, res: Response) => {
   try {
     const email = getEmailFromHeader(req);
+
+    //marking the loggedIn field of user as false
     const { error: updateUserError, message: updateUserMessage } =
       await updateUser({ email, loggedIn: false });
 
     if (updateUserError) {
-      //log error
+      console.error(updateUserMessage)
       return res.status(500).json({
         error: true,
         message: ERROR_MESSAGES.INTERNAL_SERVER,
@@ -199,7 +207,7 @@ export const logout = async (req: Request, res: Response) => {
       data: {},
     });
   } catch (error) {
-    //log error
+    console.error(error);
     return res.status(500).json({
       error: true,
       message: ERROR_MESSAGES.INTERNAL_SERVER,

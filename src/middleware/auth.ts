@@ -10,6 +10,8 @@ export const verifyJWT = async (
   next: NextFunction
 ) => {
   try {
+
+    //extracting accessToken
     let accessToken = req?.headers?.authorization;
     if (!accessToken || typeof accessToken != "string") {
       return res.status(401).json({
@@ -18,6 +20,7 @@ export const verifyJWT = async (
         data: {},
       });
     }
+
     accessToken = accessToken.split(" ")[1];
     if (!accessToken) {
       return res.status(400).json({
@@ -27,6 +30,7 @@ export const verifyJWT = async (
       });
     }
 
+    //decoding data from  jwt
     let decodedInformation
     try {
       decodedInformation = jwt.verify(accessToken, jwtconfig.secretKey);
@@ -52,6 +56,7 @@ export const verifyJWT = async (
       });
     }
 
+    //checking if user exists with email from token data and if its loggedIn status is true or not
     const existingUser = await getUserByEmail(email);
     if (!existingUser || !existingUser.data['loggedIn']) {
       return res.status(400).json({
@@ -61,6 +66,7 @@ export const verifyJWT = async (
       });
     }
 
+    //adding the email in header so that can be extracted further
     req.headers["email"] = email;
     next();
   } catch (error) {

@@ -27,6 +27,7 @@ const ERROR_MESSAGES = {
   INVALID_REQUEST_BODY: "Invalid request body.",
   UNAUTHORIZED: "Unauthorized.",
   INVALID_TOKEN: "Invalid token provided.",
+  ID_NOT_PRESENT: "Kindly provide taskId in url"
 };
 
 export { SUCCESS, ERROR_MESSAGES };

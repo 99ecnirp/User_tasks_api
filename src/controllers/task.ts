@@ -13,12 +13,23 @@ const getById = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const email = getEmailFromHeader(req);
+
+    if(!id){
+      return res.status(400).json({
+        error: true,
+        message: ERROR_MESSAGES.ID_NOT_PRESENT,
+        data: {},
+      });
+    }
+
+    //getting task from database
     const {
       error: getTaskByIdError,
       message: getTaskByIdMessage,
       data: getTaskByIdData,
       status: getTaskBtIdStatus,
     } = await getTaskById(email, id);
+
     if (getTaskByIdError) {
       console.error(getTaskByIdMessage);
       return res.status(getTaskBtIdStatus ?? 500).json({
@@ -27,6 +38,7 @@ const getById = async (req: Request, res: Response) => {
         data: getTaskByIdData,
       });
     }
+
     return res.status(200).json({
       error: false,
       message: SUCCESS,
@@ -45,11 +57,14 @@ const getById = async (req: Request, res: Response) => {
 const get = async (req: Request, res: Response) => {
   try {
     const email = getEmailFromHeader(req);
+
+    //getting all tasks
     const {
       error: getAllTasksError,
       message: getAllTasksMessage,
       data: getAllTasksData,
     } = await getAllTasks(email);
+
     if (getAllTasksError) {
       console.error(getAllTasksMessage);
       return res.send(500).json({
@@ -76,13 +91,15 @@ const get = async (req: Request, res: Response) => {
 
 const create = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
+
     const email = getEmailFromHeader(req);
+
     const {
       error: createTaskError,
       message: createTaskMessage,
       data: createTaskData,
     } = await createTask(email, req.body);
+
     if (createTaskError) {
       console.error(createTaskMessage);
       res.send(500).json({
@@ -91,6 +108,7 @@ const create = async (req: Request, res: Response) => {
         data: createTaskData,
       });
     }
+
     return res.status(200).json({
       error: false,
       message: createTaskMessage,
@@ -110,11 +128,21 @@ const update = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const email = getEmailFromHeader(req);
+
+    if(!id){
+      return res.status(400).json({
+        error: true,
+        message: ERROR_MESSAGES.ID_NOT_PRESENT,
+        data: {},
+      });
+    }
+
     const {
       error: updateTaskByIdError,
       message: updateTaskByIdMessage,
       data: updateTaskByIdData,
     } = await updateTaskById(email, id, req.body);
+
     if (updateTaskByIdError) {
       console.error(updateTaskByIdMessage);
       res.send(500).json({
@@ -123,6 +151,7 @@ const update = async (req: Request, res: Response) => {
         data: updateTaskByIdData,
       });
     }
+
     return res.status(200).json({
       error: false,
       message: updateTaskByIdMessage,
@@ -142,6 +171,15 @@ const remove = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const email = getEmailFromHeader(req);
+
+    if(!id){
+      return res.status(400).json({
+        error: true,
+        message: ERROR_MESSAGES.ID_NOT_PRESENT,
+        data: {},
+      });
+    }
+
     const {
       error: removeTaskByIdError,
       message: removeTaskByIdMessage,
@@ -160,6 +198,7 @@ const remove = async (req: Request, res: Response) => {
       message: removeTaskByIdMessage,
       data: removeTaskByIdData,
     });
+    
   } catch (error) {
     console.error(error);
     return res.status(500).json({

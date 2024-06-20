@@ -3,6 +3,8 @@ import userModel from "./user";
 import { ERROR_MESSAGES, SUCCESS } from "../utils/constants";
 import { ICommonReturn } from "../utils/interfaces";
 
+// getting all subtasks, needDeletedSubtasks is flag which represents 
+// whether we want all the subtasks or only which are not marked for deleteion
 const getAllSubTasks = async (
   email: string,
   taskId: string,

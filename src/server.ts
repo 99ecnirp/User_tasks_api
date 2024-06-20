@@ -8,15 +8,18 @@ import { appConfig } from "./config";
 const router = express();
 
 async function main() {
+
+  //checking connection with mongo 
   await connectMongo();
+
   router.use((req, res, next) => {
-    /** Log the req */
+    //Log the req
     console.log(
       `Incomming - METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.socket.remoteAddress}]`
     );
 
     res.on("finish", () => {
-      /** Log the res */
+      // Log the res 
       console.log(
         `Result - METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.socket.remoteAddress}] - STATUS: [${res.statusCode}]`
       );
@@ -27,7 +30,7 @@ async function main() {
   router.use(express.urlencoded({ extended: true }));
   router.use(express.json());
 
-  /** Rules of our API */
+  //Rules of our API
   router.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
@@ -46,11 +49,11 @@ async function main() {
     next();
   });
 
-  /** Routes */
+  //Routes 
   router.use("/user", userRoutes);
   router.use("/tasks", taskRoutes);
 
-  /** Healthcheck */
+  //Healthcheck
   router.get("/healthcheck", (req, res) =>
     res.status(200).json({
       error: false,
@@ -58,7 +61,7 @@ async function main() {
     })
   );
 
-  /** Error handling */
+  //Error handling
   router.use((req, res, next) => {
     const error = new Error(ERROR_MESSAGES.INTERNAL_SERVER);
 

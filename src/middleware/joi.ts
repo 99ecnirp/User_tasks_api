@@ -5,8 +5,8 @@ import { ITask, IUser } from "../utils/interfaces";
 export const ValidateJoi = (schema: ObjectSchema | ArraySchema) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
+      //validating the request body with provided schema
       await schema.validateAsync(req.body);
-
       next();
     } catch (error) {
       console.log(error);
@@ -16,6 +16,7 @@ export const ValidateJoi = (schema: ObjectSchema | ArraySchema) => {
   };
 };
 
+//schema for validations
 export const Schemas = {
   user: {
     create: Joi.object<IUser>({

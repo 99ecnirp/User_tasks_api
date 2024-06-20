@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 import schema from "./schema";
 
 dotenv.config();
+
+//validations on env variables
 const { error, value: envVars } = schema.validate(process.env);
 if (error) {
   console.error(error);
